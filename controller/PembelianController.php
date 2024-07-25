@@ -28,5 +28,12 @@ class PembelianController {
             include 'view/pembelian/create.php';
         }
     }    
+    
+    public function delete($id) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['delete'] == 'yes') {
+            $this->pembelianModel->delete($id);
+            header("Location: index.php?action=pembelian");
+        }
+    }
 }
 ?>

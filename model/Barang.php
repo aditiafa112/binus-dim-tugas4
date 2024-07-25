@@ -1,5 +1,6 @@
 <?php
 require_once 'database.php';
+require_once 'lib/linier_programming.php';
 
 class Barang {
     private $conn;
@@ -41,6 +42,30 @@ class Barang {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $id);
         return $stmt->execute();
+    }
+
+    public function getReport() {
+        $sql = "
+        SELECT 
+            b.id AS id_barang,
+            b.nama,
+            b.satuan,
+            COALESCE(SUM(pb.jumlah_pembelian * pb.harga_beli), 0) AS total_biaya_pembelian,
+            COALESCE(SUM(pj.jumlah_penjualan * pj.harga_jual), 0) AS total_pendapatan_penjualan,
+            COALESCE(SUM(pj.jumlah_penjualan * pj.harga_jual), 0) - COALESCE(SUM(pb.jumlah_pembelian * pb.harga_beli), 0) AS laba_rugi
+        FROM 
+            barang b
+        LEFT JOIN 
+            pembelian pb ON b.id = pb.id_barang
+        LEFT JOIN 
+            penjualan pj ON b.id = pj.id_barang
+        GROUP BY 
+            b.id, b.nama, b.satuan
+        ORDER BY 
+            b.id;
+        ";
+        $result = $this->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
 ?>

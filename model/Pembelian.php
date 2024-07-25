@@ -20,5 +20,12 @@ class Pembelian {
         $stmt->bind_param("iii", $id_barang, $jumlah_pembelian, $harga_beli);
         return $stmt->execute();
     }
+
+    public function delete($id) {
+        $sql = "DELETE FROM pembelian WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
 }
 ?>

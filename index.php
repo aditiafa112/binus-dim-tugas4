@@ -2,6 +2,7 @@
 require_once 'controller/BarangController.php';
 require_once 'controller/LaporanController.php';
 require_once 'controller/PembelianController.php';
+require_once 'controller/PenjualanController.php';
 
 
 // Default action
@@ -36,8 +37,27 @@ switch ($action) {
         $controller = new PembelianController();
         $controller->create();
         break;
+    case 'pembelian-delete':
+        $controller = new PembelianController();
+        $id = isset($_GET['id']) ? $_GET['id'] : 0;
+        $controller->delete($id);
+        break;
+    case 'penjualan':
+        $controller = new PenjualanController();
+        $controller->index();
+        break;
+    case 'penjualan-create':
+        $controller = new PenjualanController();
+        $controller->create();
+        break;
+    case 'penjualan-delete':
+        $controller = new PenjualanController();
+        $id = isset($_GET['id']) ? $_GET['id'] : 0;
+        $controller->delete($id);
+        break;
     case 'laporan':
         $controller = new LaporanController();
+        $controller->index();
         break;
     default:
         $controller = new BarangController();
