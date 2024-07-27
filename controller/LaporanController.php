@@ -3,6 +3,7 @@ require_once 'model/Barang.php';
 require_once 'model/Pembelian.php';
 require_once 'model/Penjualan.php';
 require_once 'lib/linier_programming.php';
+require_once 'lib/formatRupiah.php';
 
 class LaporanController {
     private $barangModel;

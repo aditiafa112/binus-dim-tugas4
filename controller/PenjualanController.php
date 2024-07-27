@@ -1,6 +1,7 @@
 <?php
 require_once 'model/Penjualan.php';
 require_once 'model/Barang.php';
+require_once 'lib/formatRupiah.php';
 
 class PenjualanController {
     private $penjualanModel;

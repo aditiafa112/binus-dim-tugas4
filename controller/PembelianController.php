@@ -1,6 +1,7 @@
 <?php
 require_once 'model/Pembelian.php';
 require_once 'model/Barang.php';
+require_once 'lib/formatRupiah.php';
 
 class PembelianController {
     private $pembelianModel;
