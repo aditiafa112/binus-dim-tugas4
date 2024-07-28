@@ -46,21 +46,23 @@ class Barang {
 
     public function getReport() {
         $sql = "
-        SELECT 
+         SELECT 
             b.id AS id_barang,
             b.nama,
             b.satuan,
-            COALESCE(SUM(pb.jumlah_pembelian * pb.harga_beli), 0) AS total_biaya_pembelian,
-            COALESCE(SUM(pj.jumlah_penjualan * pj.harga_jual), 0) AS total_pendapatan_penjualan,
-            COALESCE(SUM(pj.jumlah_penjualan * pj.harga_jual), 0) - COALESCE(SUM(pb.jumlah_pembelian * pb.harga_beli), 0) AS laba_rugi
+            COALESCE(pb.total_biaya_pembelian, 0) AS total_biaya_pembelian,
+            COALESCE(pj.total_pendapatan_penjualan, 0) AS total_pendapatan_penjualan,
+            COALESCE(pj.total_pendapatan_penjualan, 0) - COALESCE(pb.total_biaya_pembelian, 0) AS laba_rugi
         FROM 
             barang b
         LEFT JOIN 
-            pembelian pb ON b.id = pb.id_barang
+            (SELECT id_barang, SUM(jumlah_pembelian * harga_beli) AS total_biaya_pembelian
+             FROM pembelian
+             GROUP BY id_barang) pb ON b.id = pb.id_barang
         LEFT JOIN 
-            penjualan pj ON b.id = pj.id_barang
-        GROUP BY 
-            b.id, b.nama, b.satuan
+            (SELECT id_barang, SUM(jumlah_penjualan * harga_jual) AS total_pendapatan_penjualan
+             FROM penjualan
+             GROUP BY id_barang) pj ON b.id = pj.id_barang
         ORDER BY 
             b.id;
         ";
